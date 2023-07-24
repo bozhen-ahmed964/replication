@@ -93,6 +93,16 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+            // Slave server connection
+            'mysql_slave' => [
+                'driver' => 'mysql',
+                'host' => env('DB_SLAVE_HOST', '127.0.0.1'),
+                'port' => env('DB_SLAVE_PORT', '3306'),
+                'database' => env('DB_SLAVE_DATABASE', 'test'),
+                'username' => env('DB_SLAVE_USERNAME', 'root'),
+                'password' => env('DB_SLAVE_PASSWORD', 'root'),
+            ],
+
     ],
 
     /*
