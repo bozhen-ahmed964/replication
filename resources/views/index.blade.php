@@ -13,9 +13,15 @@
 </head>
 
 <body>
+    <form action="{{ url('toggle-database') }}" method="post" class="mt-4">
+        @csrf
+        <input type="hidden" name="use_slave" value="{{ !$useSlave }}">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+            Switch Database
+        </button>
+    </form>
 
     <div class="flex items-center justify-center p-12">
-
         <div class="mx-auto w-full max-w-[550px]">
             <form method="post" action="{{ url('/create') }}">
                 @csrf

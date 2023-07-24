@@ -21,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/index', [\App\Http\Controllers\MessageController::class, 'index']);
 Route::post('/create', [\App\Http\Controllers\MessageController::class, 'create']);
 Route::delete('/delete/{id}', [\App\Http\Controllers\MessageController::class, 'delete']);
+Route::post('/toggle-database', [\App\Http\Controllers\MessageController::class ,'toggleDatabase']);

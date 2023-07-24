@@ -4,31 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\messageModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class MessageController extends Controller
 {
-    protected $model;
 
-    public function __construct()
-    {
-        $this->model = new messageModel();
-        $this->model->setConnection('mysql_slave');
-    }
 
     public function index()
     {
-        $data = $this->model->all();
-        return view('index', compact('data'));
+
+        $useSlave = env('DB_USE_SLAVE', false);
+        $connection = $useSlave ? 'mysql_slave' : 'mysql';
+        $users = DB::connection($connection)->select('SELECT * FROM message');
+        $data = messageModel::all();
+        return view('index', compact('data', 'users', 'useSlave'));
+    }
+
+    public function toggleDatabase(Request $request)
+    {
+        $useSlave = $request->input('use_slave', false);
+        $envData = file_get_contents(base_path('.env'));
+        $envData = preg_replace('/DB_USE_SLAVE=(.*)/', 'DB_USE_SLAVE=' . $useSlave, $envData);
+        file_put_contents(base_path('.env'), $envData);
+        return redirect()->back();
     }
 
     public function create(Request $request)
     {
-        // Create a new instance of the messageModel
+
         $data = new messageModel();
         $data->full_name = $request->input('name');
-        $data->email = $request->input('email'); // Set the correct property
-        $data->subject = $request->input('subject'); // Set the correct property
-        $data->message = $request->input('message'); // Set the correct property
+        $data->email = $request->input('email');
+        $data->subject = $request->input('subject');
+        $data->message = $request->input('message');
         $data->save();
         return redirect('/index');
     }
